@@ -25,7 +25,8 @@ typedef struct v2f {
 	Vec3f normal;
 	Vec2f texcoord;
 	Color color_tex;
-	Vec3f ndc_coord;
+	//Vec3f ndc_coord;
+	float intensity;
 } v2f;
 
 // ************************************************************************************
@@ -47,14 +48,24 @@ private:
 	Matrix proj_mat;
 	Matrix viewPort_mat;
 	Matrix MVP_mat;
+	int width, height;	// 屏幕映射相关
+
+public:
+	int v_x, v_y;		// v_x和v_y是视口偏移量
 
 public:
 	Transformer(Matrix model, Matrix lookAt, Matrix proj, Matrix viewPort_mat);
+	// 填充所有矩阵
 	Transformer(int t_world_width, int t_world_height, int t_world_depth, float x, float y, float z,
 		Vec3f camera_pos, Vec3f center, Vec3f up, 
 		float FOV, float aspect, int n, int f, 
 		int width, int height, int depth, int v_x, int v_y);
+	// 不填充Model矩阵
+	Transformer(Vec3f camera_pos, Vec3f center, Vec3f up,
+		float FOV, float aspect, int n, int f,
+		int width, int height, int depth, int v_x, int v_y);
 	Matrix update_MVP();		// 组合MVP三矩阵
+	Matrix update_MVP_without_model();			// 不更新model矩阵
 	Matrix get_viewPort();	// 返回屏幕映射所需要的矩阵
 
 	// 模型变换
@@ -104,9 +115,13 @@ public:
 	// 过程处理着色器：输入面索引iface和0-2的索引n找到顶点，并将其的相关数据存储在a2v结构中
 	virtual a2v processShader(int iface, int n);	// 这个名字是我自创的！
 	// 顶点着色器：输入a2v，处理后返回v2f
-	virtual v2f vertexShader(a2v a);		
+	virtual v2f vertexShader(a2v a);
+	// 高德洛着色
+	virtual v2f vertexShader_Gouruad(a2v a, Vec3f lightPos);
 	// 片元着色器：输入该片元的重心坐标与源颜色，进行处理，bool返回值表示是否丢弃该片元
 	virtual bool fragmentShader(v2f v, Vec3f bar, COLORREF& color, Vec3f lightPos);
+	// 高德洛着色
+	bool fragmentShader_Gouruad(COLORREF& c, float intensity);
 	// 渲染zbuffer用
 	virtual bool fragmentShader(Color& c, float z);
 
@@ -115,6 +130,7 @@ public:
 	unsigned int* get_screen_fb();			// 获取screen_fb
 	float* get_zbuffer();				// 获取zbuffer
 	Transformer& get_transformer();			// 获取变换设备
+
 
 };
 
@@ -139,6 +155,10 @@ void DrawTriangle_b_test(Vec4f* ptr, COLORREF color, unsigned int* screen_fb, fl
 
 // 测试加了shader的新结构
 void DrawTriangle_barycentric_Shader(v2f* v_s, Vec3f lightPos, Renderer renderer);
+// 逐顶点——高德洛着色
+void DrawTriangle_barycentric_Shader_Gouruad(v2f* v_s, Renderer renderer);
+// 逐像素
+void DrawTriangle_barycentric_Shader_pixel(v2f* v_s, Vec3f lightPos, Renderer renderer);
 
 void DrawTriangle_barycentric_Shader_origin(v2f* v_s, Vec3f lightPos, Renderer renderer);
 // 新结构的三角形测试

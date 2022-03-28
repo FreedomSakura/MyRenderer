@@ -27,7 +27,11 @@ unsigned int* screen_fb;	// 缓冲区
 int keys_buffer[512];
 // 测试回调函数中的消息系统重定向！
 short zDelta = 0;
+// 响应标志
+// 若响应了一些会改变矩阵输入信息的信息后，flag变为true，我们更新MVP矩阵
+bool flag = false;
 
+// ****************************
 // 灯光位置
 Vec3f light_pos(1.f, 1.f, 0.5f);
 // LookAt矩阵相关
@@ -74,6 +78,8 @@ void clear_frameBuffer(unsigned int* frameBuffer, int width, int height, COLORRE
 void clear_zbuffer(float* zbuffer, int width, int height);
 // Shader结构优化&纹理
 void Draw_2(HWND hwnd, Renderer renderer);
+// Gouruad着色
+void Draw_2_Gouruad(HWND hwnd, Renderer renderer, Vec3f lightPos);	
 // 尝试快速化渲染
 void Draw_3_mutil(HWND hwnd, Renderer renderer);
 // 尝试快速存储...（将第一次processShader得到的a2v存储起来，后续步骤就可以省去processShader）
@@ -162,8 +168,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 	float aspect = 4.f / 3.f;
 	int n = 10;
 	int f = 1000;
-	Transformer transformer(world_width, world_height, world_depth, 0, 0, 0,
-		camera_pos, center, up, 
+	//// 填充所有矩阵
+	//Transformer transformer(world_width, world_height, world_depth, 0, 0, 0,
+	//	camera_pos, center, up, 
+	//	FOV, aspect, n, f,
+	//	width, height, depth, v_x, v_y);
+	// 不填充Model矩阵
+	Transformer transformer(camera_pos, center, up,
 		FOV, aspect, n, f,
 		width, height, depth, v_x, v_y);
 
@@ -176,12 +187,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 		for (int j = 0; j < height; j++) 
 			screen_fb[j * width + i] = back_color;
 	}
-
-	// 绘制模型
-	// 绘制f个面
-	//cout << mesh->get_vert_(mesh->get_faces_vert_(807)).y << endl;
-	//cout << mesh->get_vert_(mesh->get_faces_vert_(808)).y << endl;
-	//cout << mesh->get_vert_(mesh->get_faces_vert_(809)).y << endl;
 
 	//// 点填充模型
 	//PointModel(mesh, color, screen_fb, width, height);
@@ -285,10 +290,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 		clear_frameBuffer(screen_fb, width, height, back_color);
 		clear_zbuffer(zbuffer, width, height);
 
+		
 		if (keys_buffer[0x41]) camera_pos.x -= 0.2;
 		if (keys_buffer[0x44]) camera_pos.x += 0.2;
 		if (keys_buffer[0x57]) camera_pos.y += 0.2;
 		if (keys_buffer[0x53]) camera_pos.y -= 0.2;
+		if (keys_buffer[0x46]) camera_pos.z = -camera_pos.z;
 
 		if (zDelta > 0) camera_pos.z -= 0.2;
 		if (zDelta < 0) camera_pos.z += 0.2;
@@ -297,13 +304,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 
 		// 更新矩阵
 		renderer.get_transformer().LookAt(camera_pos, center, up);
-		renderer.get_transformer().update_MVP();
+		//renderer.get_transformer().update_MVP();
+		renderer.get_transformer().update_MVP_without_model();
 
 		Draw_2(hwnd, renderer);
-		//Draw_6_test_Shader(hwnd, renderer);
+		//Draw_2_Gouruad(hwnd, renderer, light_pos);
 
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-
+			
 			msg.lParam = (DWORD)&renderer;
 			//（1）翻译消息
 			TranslateMessage(&msg);
@@ -377,6 +385,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
 	case WM_LBUTTONDOWN:
 	{
 		light_pos.z += 1.f;
+		//flag = true;
 
 		break;
 	}
@@ -384,19 +393,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
 	case WM_RBUTTONDOWN:
 	{
 		light_pos.z -= 1.f;
+		//flag = true;
 
 		break;
 	}
 
 	case WM_MOUSEWHEEL:
 	{
-		zDelta = wParam >> 16;
-		
+		//flag = true;
+		zDelta = wParam >> 16;	
 		break;
 	}
 
 	case WM_KEYDOWN:
 	{
+		//flag = true;
 		keys_buffer[wParam & 511] = 1;
 		break;
 	}
@@ -451,6 +462,24 @@ void Draw_2(HWND hwnd, Renderer renderer) {
 
 		// 测试新的Shader结构
 		DrawTriangle_barycentric_Shader(v_s, light_pos, renderer);
+		//DrawTriangle_barycentric_zbuffer(v_s, renderer);
+	}
+
+	HDC hDC = GetDC(hwnd);
+	BitBlt(hDC, 0, 0, width, height, screen_dc, 0, 0, SRCCOPY);
+	ReleaseDC(hwnd, hDC);
+}
+void Draw_2_Gouruad(HWND hwnd, Renderer renderer, Vec3f lightPos) {
+	for (int i = 0; i < renderer.get_nums_faces(); i++) {
+		a2v a_s[3];
+		v2f v_s[3];
+		for (int j = 0; j < 3; j++) {
+			a_s[j] = renderer.processShader(i, j);
+			v_s[j] = renderer.vertexShader_Gouruad(a_s[j], lightPos);
+		}
+
+		// 测试新的Shader结构
+		DrawTriangle_barycentric_Shader_Gouruad(v_s, renderer);
 	}
 
 	HDC hDC = GetDC(hwnd);
