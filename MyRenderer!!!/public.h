@@ -9,8 +9,8 @@ const int height = 600;
 const int depth = 600;
 // 窗口偏移
 const int v_x = 0;
-const int v_y = 0;
-//const int v_y = -height/2;
+//const int v_y = 0;
+const int v_y = -height/4;
 
 // 世界属性
 const int world_width = 800;

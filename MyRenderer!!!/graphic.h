@@ -118,6 +118,8 @@ public:
 	virtual v2f vertexShader(a2v a);
 	// 高德洛着色
 	virtual v2f vertexShader_Gouruad(a2v a, Vec3f lightPos);
+	// 将proecssShader和vertexShader结合在一起
+	virtual v2f vertexShader_and_proecc(int iface, int n);
 	// 片元着色器：输入该片元的重心坐标与源颜色，进行处理，bool返回值表示是否丢弃该片元
 	virtual bool fragmentShader(v2f v, Vec3f bar, COLORREF& color, Vec3f lightPos);
 	// 高德洛着色
@@ -130,7 +132,8 @@ public:
 	unsigned int* get_screen_fb();			// 获取screen_fb
 	float* get_zbuffer();				// 获取zbuffer
 	Transformer& get_transformer();			// 获取变换设备
-
+	int get_width();
+	int get_height();
 
 };
 
@@ -141,7 +144,7 @@ public:
 // 画线
 void DrawLine(Vec2i v1, Vec2i v2, COLORREF color, unsigned int* screen_fb, const int width, const int height);
 // 点模式
-void PointModel(Mesh* mesh, COLORREF color, unsigned int* screen_fb, const int width, const int height);
+void PointModel(HWND hwnd, Renderer renderer, COLORREF color, HDC screen_dc);
 // 线框模式
 void LineModel(Mesh* mesh, COLORREF color, unsigned int* screen_fb, const int width, const int height);
 
@@ -169,6 +172,8 @@ void DrawTriangle_barycentric_zbuffer(v2f* v_s, Renderer renderer);
 
 // 背面剔除
 bool is_back_facing(Vec3f a, Vec3f b, Vec3f c);
+// 视锥裁剪
+int transform_check_cvv(Vec4f v);
 
 // ************************************************************************************
 // Shading

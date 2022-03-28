@@ -33,7 +33,7 @@ bool flag = false;
 
 // ****************************
 // 灯光位置
-Vec3f light_pos(1.f, 1.f, 0.5f);
+Vec3f light_pos(1.f, 1.f, 1.5f);
 // LookAt矩阵相关
 // 相机位置
 Vec3f camera_pos(0.f, 0.f, 5.f);
@@ -55,13 +55,13 @@ float* zbuffer;
 // 读取的模型文件路径
 //string objPath = "./obj/Charmander.obj";
 //string objPath = "./obj/african_head.obj";
-const string objPath = "./obj/diablo3_pose.obj";
-//const string objPath = "./obj/mary/Marry.obj";
+//const string objPath = "./obj/diablo3_pose.obj";
+const string objPath = "./obj/mary/Marry.obj";
 
 // 纹理路径
 //const char* texPath = "./obj/african_head_diffuse.tga";
-const char* texPath = "./obj/diablo3_pose_diffuse.tga";
-//const char* texPath = "./obj/mary/Marry_diffuse.tga";
+//const char* texPath = "./obj/diablo3_pose_diffuse.tga";
+const char* texPath = "./obj/mary/Marry_diffuse.tga";
 
 // 模型
 Mesh* mesh;
@@ -80,6 +80,8 @@ void clear_zbuffer(float* zbuffer, int width, int height);
 void Draw_2(HWND hwnd, Renderer renderer);
 // Gouruad着色
 void Draw_2_Gouruad(HWND hwnd, Renderer renderer, Vec3f lightPos);	
+// 将vs与ps结合
+void Draw_2_vs_and_ps(HWND hwnd, Renderer renderer);
 // 尝试快速化渲染
 void Draw_3_mutil(HWND hwnd, Renderer renderer);
 // 尝试快速存储...（将第一次processShader得到的a2v存储起来，后续步骤就可以省去processShader）
@@ -94,7 +96,6 @@ void init_Register_wndclass(WNDCLASS& wndclass, HINSTANCE hInstance, TCHAR szApp
 // 设置bitmapinfo
 void set_bitmap(BITMAPINFO& bi, HDC& screen_dc, HBITMAP& screen_hb, HBITMAP& screen_ob,
 	unsigned int*& screen_fb, LPVOID ptr);
-
 
 // 回调
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -205,11 +206,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 	//		a2v_s_.push_back(a_s[j]);
 	//		v_s[j] = renderer.vertexShader(a_s[j]);
 	//	}
-
-	//	// 测试新的Shader结构
-	//	DrawTriangle_barycentric_Shader(v_s, light_pos, renderer);
-
-	//	//DrawTriangle_barycentric_zbuffer(v_s, renderer);
 	//}
 
 	// *************************** 测试时间！***************************
@@ -220,21 +216,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 	//// 开始渲染的时间
 	//test_time_1 = get_cpu_time();
 
-	////Draw_2(hwnd, renderer);
-	//vector<a2v> a2v_s_;
-
-	//for (int i = 0; i < mesh->nums_faces(); i++) {
-	//	a2v a_s[3];
-	//	v2f v_s[3];
-	//	for (int j = 0; j < 3; j++) {
-	//		a_s[j] = renderer.processShader(i, j);
-	//		a2v_s_.push_back(a_s[j]);
-	//		v_s[j] = renderer.vertexShader(a_s[j]);
-	//	}
-
-	//	DrawTriangle_barycentric_Shader(v_s, light_pos, renderer);
-	//	//DrawTriangle_barycentric_zbuffer(v_s, renderer);
-	//}
 
 	//test_time_2 = get_cpu_time();
 	//
@@ -257,10 +238,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 	//}
 	//DrawTriangle_barycentric_zbuffer(screen_coords, color, screen_fb, zbuffer, width, height);
 
-	// **************************************************************
-	//// 测试 点
-	//multiply_COLORREF(color, 0.5);
-	//screen_fb[300 * width + 300] = color;
 
 	// **************************************************************
 	//HDC hDC = GetDC(hwnd);
@@ -279,6 +256,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 
 	// 开始渲染的时间
 	print_time = get_cpu_time();
+
+	unsigned int count = 0;
 
 	//7、消息循环
 	while (1) {
@@ -306,9 +285,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 		renderer.get_transformer().LookAt(camera_pos, center, up);
 		//renderer.get_transformer().update_MVP();
 		renderer.get_transformer().update_MVP_without_model();
-
+		
+		//PointModel(hwnd, renderer, white_color, screen_dc);
 		Draw_2(hwnd, renderer);
+		//Draw_2_vs_and_ps(hwnd, renderer);
 		//Draw_2_Gouruad(hwnd, renderer, light_pos);
+		//Draw_4_fastStorage(hwnd, renderer, &a2v_s_);
+		//Draw_4_fastStorage(hwnd, renderer);
 
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			
@@ -453,16 +436,13 @@ void clear_zbuffer(float* zbuffer, int width, int height) {
 
 void Draw_2(HWND hwnd, Renderer renderer) {
 	for (int i = 0; i < renderer.get_nums_faces(); i++) {
-		a2v a_s[3];
 		v2f v_s[3];
 		for (int j = 0; j < 3; j++) {
-			a_s[j] = renderer.processShader(i, j);
-			v_s[j] = renderer.vertexShader(a_s[j]);
+			v_s[j] = renderer.vertexShader(renderer.processShader(i, j));
 		}
 
 		// 测试新的Shader结构
 		DrawTriangle_barycentric_Shader(v_s, light_pos, renderer);
-		//DrawTriangle_barycentric_zbuffer(v_s, renderer);
 	}
 
 	HDC hDC = GetDC(hwnd);
@@ -480,6 +460,24 @@ void Draw_2_Gouruad(HWND hwnd, Renderer renderer, Vec3f lightPos) {
 
 		// 测试新的Shader结构
 		DrawTriangle_barycentric_Shader_Gouruad(v_s, renderer);
+	}
+
+	HDC hDC = GetDC(hwnd);
+	BitBlt(hDC, 0, 0, width, height, screen_dc, 0, 0, SRCCOPY);
+	ReleaseDC(hwnd, hDC);
+}
+
+// 将vs与ps结合
+void Draw_2_vs_and_ps(HWND hwnd, Renderer renderer) {
+	for (int i = 0; i < renderer.get_nums_faces(); i++) {
+		v2f v_s[3];
+		for (int j = 0; j < 3; j++) {
+			v_s[j] = renderer.vertexShader_and_proecc(i, j);
+		}
+
+		// 测试新的Shader结构
+		DrawTriangle_barycentric_Shader(v_s, light_pos, renderer);
+		//DrawTriangle_barycentric_zbuffer(v_s, renderer);
 	}
 
 	HDC hDC = GetDC(hwnd);

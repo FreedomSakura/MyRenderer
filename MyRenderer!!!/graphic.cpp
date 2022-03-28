@@ -34,7 +34,7 @@ Transformer::Transformer(Vec3f camera_pos, Vec3f center, Vec3f up,
 	int width, int height, int depth, int v_x, int v_y) {
 	LookAt(camera_pos, center, up);
 	perspProjection(FOV, aspect, n, f);
-	ViewPort(width, height, depth, v_x, v_y);
+	//ViewPort(width, height, depth, v_x, v_y);
 
 	this->width = width;
 	this->height = height;
@@ -277,6 +277,8 @@ a2v Renderer::processShader(int iface, int n) {
 // 不使用model，且不用矩阵做屏幕映射 --> 平均多了12帧！！！！！
 v2f Renderer::vertexShader(a2v a) {
 	v2f v;
+	//cout << "a: x: " << a.vertex_native.x << " y: " << a.vertex_native.y << " z: " << a.vertex_native.z
+	//	<< " w: " << a.vertex_native.w << endl;
 
 	//变换模块
 	Vec4f clip_coord;
@@ -285,6 +287,10 @@ v2f Renderer::vertexShader(a2v a) {
 	Vec4f ndc_coord;	// ndc应该是以三维向量表示的
 	// MVP
 	clip_coord = transformer.update_MVP_without_model() * a.vertex_native;
+	//clip_coord = transformer.update_MVP() * a.vertex_native;
+	
+	//cout << "x: " << clip_coord.x << " y: " << clip_coord.y << " z: " << v.vertex.z
+	//	<< " w: " << clip_coord.w << endl;
 	// 透视除法
 	ndc_coord = clip_coord / clip_coord.w;
 	// 屏幕映射
@@ -303,7 +309,11 @@ v2f Renderer::vertexShader(a2v a) {
 	v.vertex = screen_coord;
 	v.normal = normal_coord;
 	v.texcoord = a.texcoord_native;
-	//v.ndc_coord = ndc_coord;
+	//v.ndc_coord = Vec3f(
+	//	clip_coord.x / clip_coord.w,
+	//	clip_coord.y / clip_coord.w,
+	//	clip_coord.z / clip_coord.w
+	//);
 	//cout << "x: " << v.vertex.x << " y: " << v.vertex.y << " z: " << v.vertex.z
 	//	<< " w: " << v.vertex.w << endl;
 	return v;
@@ -343,6 +353,36 @@ v2f Renderer::vertexShader_Gouruad(a2v a, Vec3f lightPos) {
 	return v;
 }
 
+// 将proecssShader和vertexShader结合在一起
+v2f Renderer::vertexShader_and_proecc(int iface, int n) {
+	v2f v;
+
+	//变换模块
+	Vec4f clip_coord = mesh->get_vert_(iface, n).embed_4();
+	Vec3f screen_coord;
+
+	Vec4f ndc_coord;	// ndc应该是以三维向量表示的
+	// MVP
+	clip_coord = transformer.update_MVP_without_model() * clip_coord;
+
+	//cout << "x: " << clip_coord.x << " y: " << clip_coord.y << " z: " << v.vertex.z
+	//	<< " w: " << clip_coord.w << endl;
+	// 透视除法
+	ndc_coord = clip_coord / clip_coord.w;
+
+
+	screen_coord.x = (ndc_coord.x + 1.f) * 0.5 * width + transformer.v_x;
+	screen_coord.y = (ndc_coord.y + 1.f) * 0.5 * height + transformer.v_y;
+	screen_coord.z = (ndc_coord.z + 1.f) * 0.5 * depth;
+
+	v.vertex = screen_coord;
+	v.normal = mesh->get_norm_(iface, n);
+	v.normal.normalize();
+	v.texcoord = mesh->get_uv_(iface, n);
+
+	return v;
+}
+
 
 bool Renderer::fragmentShader(v2f v, Vec3f bar, COLORREF& color, Vec3f lightPos) {
 	// 插值在fragmentShader外面完成，传进来的v2f中的数据都是插值过的
@@ -365,6 +405,13 @@ bool Renderer::fragmentShader_Gouruad(COLORREF& c, float intensity) {
 	c = multiply_COLORREF(c, intensity);
 
 	return false;
+}
+
+int Renderer::get_width() {
+	return width;
+}
+int Renderer::get_height() {
+	return height;
 }
 
 // 读取diffuse纹理
@@ -467,14 +514,27 @@ void DrawLine(Vec2i v0, Vec2i v1, COLORREF color, unsigned int* screen_fb, int w
 }
 
 // 点模式
-void PointModel(Mesh* mesh, COLORREF color, unsigned int* screen_fb, const int width, const int height) {
-	for (int i = 0; i < mesh->nums_verts(); i++) {
-		int x = (mesh->get_vert_(i).x + 1.f) * 0.5 * width;
-		int y = (mesh->get_vert_(i).y + 1.f) * 0.5 * (height - 1);
+void PointModel(HWND hwnd, Renderer renderer, COLORREF color, HDC screen_dc) {
+	unsigned int* screen_fb_1 = renderer.get_screen_fb();
+	for (int i = 0; i < renderer.get_nums_faces(); i++) {
+		a2v a_s[3];
+		v2f v_s[3];
+		for (int j = 0; j < 3; j++) {
+			a_s[j] = renderer.processShader(i, j);
+			v_s[j] = renderer.vertexShader(a_s[j]);
+		}
 
-		//screen_fb[y * width + x] = color;
-		screen_fbb(x, y, color);
+		for (int j = 0; j < 3; j++) {
+			int index = (int)(v_s[j].vertex.y * width + v_s[j].vertex.x);
+			//cout << "x: " << v_s[j].vertex.x << " y: " << v_s[j].vertex.y << " z: " << v_s[j].vertex.z << endl;
+			
+			screen_fb_1[index] = color;
+		}
 	}
+
+	HDC hDC = GetDC(hwnd);
+	BitBlt(hDC, 0, 0, width, height, screen_dc, 0, 0, SRCCOPY);
+	ReleaseDC(hwnd, hDC);
 }
 
 // 线框模式
@@ -623,6 +683,7 @@ void DrawTriangle_b_test(Vec4f* ptr, COLORREF color, unsigned int* screen_fb, fl
 	}
 }
 
+// 背面剔除
 bool is_back_facing(Vec3f a, Vec3f b, Vec3f c) {
 	float signed_area = a.x * b.y - a.y * b.x +
 		b.x * c.y - b.y * c.x +
@@ -630,10 +691,23 @@ bool is_back_facing(Vec3f a, Vec3f b, Vec3f c) {
 	return signed_area <= 0;
 }
 
+bool my_BackFace_Culling(Vec3f a, Vec3f b, Vec3f c) {
+	Vec3f P = (b - a) ^ (c - b);
+	
+	if (P.z >= 0) return true;
+	else if (P.z < 0) return false;
+
+	return true;
+}
+
 void DrawTriangle_barycentric_Shader(v2f* v_s, Vec3f lightPos, Renderer renderer) {
-	if (is_back_facing(v_s[0].vertex, v_s[1].vertex, v_s[2].vertex)) {
-		return;
-	}
+	// 背面剔除
+	if (!my_BackFace_Culling(v_s[0].vertex, v_s[1].vertex, v_s[2].vertex)) return;
+
+	//// 简单裁剪
+	//if (v_s[0].vertex.x >= width || v_s[1].vertex.x >= width || v_s[2].vertex.x >= width ||
+	//	v_s[0].vertex.y >= height || v_s[1].vertex.y >= height || v_s[2].vertex.y >= height) 
+	//	return;
 
 	// 确定包围盒
 	Vec2f bboxmin((std::numeric_limits<float>::max)(), (std::numeric_limits<float>::max)());
@@ -653,9 +727,11 @@ void DrawTriangle_barycentric_Shader(v2f* v_s, Vec3f lightPos, Renderer renderer
 	// 绘制
 	Vec2i P(0, 0);
 	for (P.x = bboxmin.x; P.x <= bboxmax.x; P.x++) {
+		if (P.x >= width || P.x < 0) continue;
 		for (P.y = bboxmin.y; P.y <= bboxmax.y; P.y++) {
-			// 简单裁剪
-			if (P.x >= width || P.y >= height || P.x < 0 || P.y < 0) continue;
+			// 2D裁剪 —— 视平面裁剪
+			//if (P.x >= width || P.y >= height || P.x < 0 || P.y < 0) continue;
+			if (P.y >= height || P.y < 0) continue;
 
 			// 求得该点的重心坐标
 			Vec3f bar = barycentric(
@@ -663,24 +739,22 @@ void DrawTriangle_barycentric_Shader(v2f* v_s, Vec3f lightPos, Renderer renderer
 				Vec2f(v_s[1].vertex.x, v_s[1].vertex.y),
 				Vec2f(v_s[2].vertex.x, v_s[2].vertex.y),
 				Vec2f(P.x, P.y));
+			if (bar.x <= 0 || bar.y <= 0 || bar.z <= 0) continue;		// 通过重心坐标判断该点是否在三角形内
 
 			// 深度插值
 			float z = v_s[0].vertex[2] * bar.x + v_s[1].vertex[2] * bar.y + v_s[2].vertex[2] * bar.z;
 			
 			int index = (int)(P.y * width + P.x);
-			if (bar.x <= 0 || bar.y <= 0 || bar.z <= 0) continue;		// 通过重心坐标判断该点是否在三角形内
 			if (zbuffer_1[index] > z) continue;		// 判断zbuffer
-			
+			//****************************************************************
+			// 片元插值
+			//****************************************************************
 			// 纹理插值
 			Vec2i tex(0, 0);
 			for (int i = 0; i < 3; i++) {
 				tex.x += v_s[i].texcoord.x * bar[i];
 				tex.y += v_s[i].texcoord.y * bar[i];
 			}
-
-			//****************************************************************
-			// 片元插值
-			//****************************************************************
 			// 将插值结果放到一个新的v2f中，并输入到fragmentShader。
 			v2f v;
 			v.vertex = Vec3f(P.x, P.y, z);
@@ -702,6 +776,8 @@ void DrawTriangle_barycentric_Shader(v2f* v_s, Vec3f lightPos, Renderer renderer
 				//cout << "P.x: " << P.x << " P.y: " << P.y << endl;
 				screen_fb_1[index] = color_result;
 			}
+
+
 		}
 	}
 }
@@ -1114,7 +1190,18 @@ float Blinn_Phong_shading(Vec3f vertPos, Vec3f normal, Vec3f lightPos) {
 	return factor;
 }
 
-
+// 视锥裁剪
+int transform_check_cvv(Vec4f v) {
+	float w = v.w;
+	int check = 0;
+	if (v.z < 0.0f) check |= 1;
+	if (v.z > w) check |= 2;
+	if (v.x < -w) check |= 4;
+	if (v.x > w) check |= 8;
+	if (v.y < -w) check |= 16;
+	if (v.y > w) check |= 32;
+	return check;
+}
 
 
 
