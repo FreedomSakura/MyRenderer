@@ -51,7 +51,9 @@ private:
 public:
 	Transformer(Matrix model, Matrix lookAt, Matrix proj, Matrix viewPort_mat);
 	Transformer(int t_world_width, int t_world_height, int t_world_depth, float x, float y, float z,
-		Vec3f camera_pos, Vec3f center, Vec3f up, float FOV, float aspect, int n, int f, int width, int height, int depth);
+		Vec3f camera_pos, Vec3f center, Vec3f up, 
+		float FOV, float aspect, int n, int f, 
+		int width, int height, int depth, int v_x, int v_y);
 	Matrix update_MVP();		// 组合MVP三矩阵
 	Matrix get_viewPort();	// 返回屏幕映射所需要的矩阵
 
@@ -69,7 +71,7 @@ public:
 	//（2）FOV式
 	Matrix perspProjection(float FOV, float aspect, int n, int f);
 	// 屏幕映射
-	Matrix ViewPort(int width, int height, int depth = 1);
+	Matrix ViewPort(int width, int height, int depth, int x, int y);
 
 };
 

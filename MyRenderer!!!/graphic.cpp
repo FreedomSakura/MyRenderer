@@ -19,13 +19,13 @@ Transformer::Transformer(Matrix model, Matrix lookAt, Matrix proj, Matrix viewPo
 // 根据输入信息计算全部变换矩阵
 Transformer::Transformer(int t_world_width, int t_world_height, int t_world_depth, 
 	float x, float y, float z,
-	Vec3f camera_pos, Vec3f center, Vec3f up, 
-	float FOV, float aspect, int n, int f, 
-	int width, int height, int depth) {
+	Vec3f camera_pos, Vec3f center, Vec3f up,
+	float FOV, float aspect, int n, int f,
+	int width, int height, int depth, int v_x, int v_y) {
 	ModelTrans(t_world_width, t_world_height, t_world_depth, x, y, z);
 	LookAt(camera_pos, center, up);
 	perspProjection(FOV, aspect, n, f);
-	ViewPort(width, height, depth);
+	ViewPort(width, height, depth, v_x, v_y);
 }
 
 // 组合/更新MVP三矩阵
@@ -164,24 +164,33 @@ Matrix Transformer::perspProjection(float FOV, float aspect, int n, int f) {
 }
 
 // 视口变换
-Matrix Transformer::ViewPort(int width, int height, int depth) {
+Matrix Transformer::ViewPort(int width, int height, int depth, int x, int y) {
 	Matrix viewport;
+	viewport.identity(4);
 
-	//（1）viewport: 先+1 => 将[-1, 1]映射到[0, 1]
-	Matrix vp_addonce(4, 4);
-	vp_addonce.identity(4);
-	vp_addonce[0][3] = 1.f;
-	vp_addonce[1][3] = 1.f;
-	vp_addonce[2][3] = 1.f;
+	////（1）viewport: 先+1 => 将[-1, 1]映射到[0, 1]
+	//Matrix vp_addonce(4, 4);
+	//vp_addonce.identity(4);
+	//vp_addonce[0][3] = 1.f;
+	//vp_addonce[1][3] = 1.f;
+	//vp_addonce[2][3] = 1.f;
 
-	//（2）viewport：后缩放
-	Matrix vp_scale(4, 4);
-	vp_scale[0][0] = (float)width / 2;
-	vp_scale[1][1] = (float)height / 2;
-	vp_scale[2][2] = (float)depth / 2;
-	vp_scale[3][3] = 1.f;
+	////（2）viewport：后缩放
+	//Matrix vp_scale(4, 4);
+	//vp_scale[0][0] = (float)width / 2;
+	//vp_scale[1][1] = (float)height / 2;
+	//vp_scale[2][2] = (float)depth / 2;
+	//vp_scale[3][3] = 1.f;
 
-	viewport = vp_scale * vp_addonce;
+	//viewport = vp_scale * vp_addonce;
+
+	viewport[0][3] = x + (float)width / 2;
+	viewport[1][3] = y + (float)height / 2;
+	viewport[2][3] = (float)depth / 2;
+
+	viewport[0][0] = (float)width / 2;
+	viewport[1][1] = (float)height / 2;
+	viewport[2][2] = (float)depth / 2;
 
 	viewPort_mat = viewport;
 	return viewport;

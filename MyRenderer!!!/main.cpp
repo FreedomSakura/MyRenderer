@@ -51,13 +51,13 @@ float* zbuffer;
 // 读取的模型文件路径
 //string objPath = "./obj/Charmander.obj";
 //string objPath = "./obj/african_head.obj";
-//const string objPath = "./obj/diablo3_pose.obj";
-const string objPath = "./obj/mary/Marry.obj";
+const string objPath = "./obj/diablo3_pose.obj";
+//const string objPath = "./obj/mary/Marry.obj";
 
 // 纹理路径
 //const char* texPath = "./obj/african_head_diffuse.tga";
-//const char* texPath = "./obj/diablo3_pose_diffuse.tga";
-const char* texPath = "./obj/mary/Marry_diffuse.tga";
+const char* texPath = "./obj/diablo3_pose_diffuse.tga";
+//const char* texPath = "./obj/mary/Marry_diffuse.tga";
 
 // 模型
 Mesh* mesh;
@@ -82,14 +82,6 @@ void Draw_4_fastStorage(HWND hwnd, Renderer renderer, vector<a2v>* a2v_s_);
 void Draw_5_single(HWND hwnd, Renderer renderer);
 // 尝试优化Shader和光栅化方面的东西
 void Draw_6_test_Shader(HWND hwnd, Renderer renderer);
-
-void camera_pos_forward(Transformer& transformer, Vec3f camera, Vec3f center, Vec3f up, float offset) {
-	camera_pos.z += 1.f;
-	// 重新计算LookAt矩阵
-	transformer.LookAt(camera, center, up);
-	// 重组MVP
-	transformer.update_MVP();
-}
 
 // 初始化窗口类并注册
 void init_Register_wndclass(WNDCLASS& wndclass, HINSTANCE hInstance, TCHAR szAppName[]);
@@ -116,7 +108,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 	WNDCLASS wndclass;									// 窗口类
 	BITMAPINFO bi;										// 存储bitmap各种信息的结构
 
-	//LPVOID ptr = (LPVOID)malloc(width * height * 4);	// 分配缓冲区
+	// 分配缓冲区
 	LPVOID ptr = new LPVOID[width * height];
 
 	// Console
@@ -153,27 +145,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 	UpdateWindow(hwnd);
 
 	//************************************************************************************************
-	// **6、设置位图缓冲区的像素颜色**（fragment shader应该在这）
-	Color c;
-	c.r = 255;
-	c.g = 255;
-	c.b = 255;
-	c.a = 255;
-
-	//BYTE R = 255;
-	//BYTE G = 255;
-	//BYTE B = 255;
-	//BYTE A = 128;
-	//COLORREF color = (B) | (G << 8) | (R << 16) | (A << 24);
+	//// **6、设置位图缓冲区的像素颜色**（fragment shader应该在这）
 
 	// ***** new ******
+	// 加载模型与纹理
 	mesh = new Mesh(objPath, texPath);
-	// Z-buffer
+	// 创建深度缓冲区
 	float* zbuffer = new float[width * height];
 	for (int i = 0; i < width * height; i++) zbuffer[i] = -(std::numeric_limits<float>::max)();
-	//cout << "zbuffer的地址（main）: " << &zbuffer << endl;
-	//cout << "zbuffer的指向（main）: " << zbuffer << endl;
-
+	// TGAImage
 	image = new TGAImage(width, height, byteDepth);
 
 	//************************************************************************************************
@@ -185,7 +165,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 	Transformer transformer(world_width, world_height, world_depth, 0, 0, 0,
 		camera_pos, center, up, 
 		FOV, aspect, n, f,
-		width, height, depth);
+		width, height, depth, v_x, v_y);
 
 	int render_model = 1;
 	// Renderer
@@ -210,21 +190,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 	//LineModel(mesh, color, screen_fb, width, height);
 
 	// *************************** 绘制模型 ****************************
-	//for (int i = 0; i < mesh->nums_faces(); i++) {
-	//	a2v a_s[3];
-	//	v2f v_s[3];
-	//	for (int j = 0; j < 3; j++) {
-	//		a_s[j] = renderer.processShader(i, j);	
-	//		v_s[j] = renderer.vertexShader(a_s[j]);
-	//	}
-	//	
-	//	// 测试新的Shader结构
-	//	DrawTriangle_barycentric_Shader(v_s, light_pos, renderer);
-
-	//	//DrawTriangle_barycentric_zbuffer(v_s, renderer);
-	//}
-
-	// *************************** 绘制模型 ****************************
 	//vector<a2v> a2v_s_;
 
 	//for (int i = 0; i < mesh->nums_faces(); i++) {
@@ -243,35 +208,34 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 	//}
 
 	// *************************** 测试时间！***************************
-	// 计算帧数
-	double test_time_1 = 0;
-	double test_time_2 = 0;
+	//// 计算帧数
+	//double test_time_1 = 0;
+	//double test_time_2 = 0;
 
-	// 开始渲染的时间
-	test_time_1 = get_cpu_time();
+	//// 开始渲染的时间
+	//test_time_1 = get_cpu_time();
 
-	//Draw_2(hwnd, renderer);
-	//Draw_5_single(hwnd, renderer);
-	vector<a2v> a2v_s_;
+	////Draw_2(hwnd, renderer);
+	//vector<a2v> a2v_s_;
 
-	for (int i = 0; i < mesh->nums_faces(); i++) {
-		a2v a_s[3];
-		v2f v_s[3];
-		for (int j = 0; j < 3; j++) {
-			a_s[j] = renderer.processShader(i, j);
-			a2v_s_.push_back(a_s[j]);
-			v_s[j] = renderer.vertexShader(a_s[j]);
-		}
+	//for (int i = 0; i < mesh->nums_faces(); i++) {
+	//	a2v a_s[3];
+	//	v2f v_s[3];
+	//	for (int j = 0; j < 3; j++) {
+	//		a_s[j] = renderer.processShader(i, j);
+	//		a2v_s_.push_back(a_s[j]);
+	//		v_s[j] = renderer.vertexShader(a_s[j]);
+	//	}
 
-		DrawTriangle_barycentric_Shader(v_s, light_pos, renderer);
-		//DrawTriangle_barycentric_zbuffer(v_s, renderer);
-	}
+	//	DrawTriangle_barycentric_Shader(v_s, light_pos, renderer);
+	//	//DrawTriangle_barycentric_zbuffer(v_s, renderer);
+	//}
 
-	test_time_2 = get_cpu_time();
-	
-	//cout << "time_1: " << test_time_1 << endl;
-	//cout << "time_2: " << test_time_2 << endl;
-	cout << "本帧渲染所花时间为：" << test_time_2 - test_time_1 << endl;
+	//test_time_2 = get_cpu_time();
+	//
+	////cout << "time_1: " << test_time_1 << endl;
+	////cout << "time_2: " << test_time_2 << endl;
+	//cout << "本帧渲染所花时间为：" << test_time_2 - test_time_1 << endl;
 
 	//// **************************************************************
 	//// 测试：单个三角形
@@ -294,10 +258,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 	//screen_fb[300 * width + 300] = color;
 
 	// **************************************************************
-	HDC hDC = GetDC(hwnd);
-	// **7、将颜色数据由源DC转换到目标DC（也就是CreateCompatibleDC()创建的内存设备上下文）**
-	BitBlt(hDC, 0, 0, width, height, screen_dc, 0, 0, SRCCOPY);
-	ReleaseDC(hwnd, hDC);
+	//HDC hDC = GetDC(hwnd);
+	//// **7、将颜色数据由源DC转换到目标DC（也就是CreateCompatibleDC()创建的内存设备上下文）**
+	//BitBlt(hDC, 0, 0, width, height, screen_dc, 0, 0, SRCCOPY);
+	//ReleaseDC(hwnd, hDC);
 
 
 	//************************************************************************************************
@@ -349,7 +313,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 		else {
 			// 没响应也要画！
 			//clear_frameBuffer(screen_fb, width, height);
-			Draw_2(hwnd, renderer);
+			//Draw_2(hwnd, renderer);
 			//Draw(hwnd);
 		}
 
@@ -413,45 +377,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
 	case WM_LBUTTONDOWN:
 	{
 		light_pos.z += 1.f;
-		// cout << "**** lightPos.z: " << light_pos.z << endl;
-		// 计算帧数
-		float test_time_1 = 0;			
-		float test_time_2 = 0;
 
-		// 开始渲染的时间
-		test_time_1 = get_cpu_time();
-
-		Draw_2(hwnd, *(Renderer*)lParam);
-		//Draw_4(hwnd, renderer, &a2v_s_);
-		//Draw_6_test_Shader(hwnd, *(Renderer*)lParam);
-
-		test_time_2 = get_cpu_time();
-		
-		cout << "time_1: " << test_time_1 << endl;
-		cout << "time_2: " << test_time_2 << endl;
-		cout << "本帧渲染所花时间为：" << test_time_2 - test_time_1 << endl;
-		
-
-		//Draw(hwnd);
 		break;
 	}
 
 	case WM_RBUTTONDOWN:
 	{
-		//light_pos.y += 1.f;
-
-
-		cout << "right button down!" << endl;
-		//Draw_2(hwnd, *(Renderer*)lParam);
+		light_pos.z -= 1.f;
 
 		break;
 	}
 
 	case WM_MOUSEWHEEL:
 	{
-		//cout << hex << wParam << endl;
 		zDelta = wParam >> 16;
-		//cout << hex << zDelta << endl;
 		
 		break;
 	}
