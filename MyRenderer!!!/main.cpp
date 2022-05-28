@@ -55,13 +55,13 @@ float* zbuffer;
 // 读取的模型文件路径
 //string objPath = "./obj/Charmander.obj";
 //string objPath = "./obj/african_head.obj";
-//const string objPath = "./obj/diablo3_pose.obj";
-const string objPath = "./obj/mary/Marry.obj";
+const string objPath = "./obj/diablo3_pose.obj";
+//const string objPath = "./obj/mary/Marry.obj";
 
 // 纹理路径
 //const char* texPath = "./obj/african_head_diffuse.tga";
-//const char* texPath = "./obj/diablo3_pose_diffuse.tga";
-const char* texPath = "./obj/mary/Marry_diffuse.tga";
+const char* texPath = "./obj/diablo3_pose_diffuse.tga";
+//const char* texPath = "./obj/mary/Marry_diffuse.tga";
 
 // 模型
 Mesh* mesh;
@@ -268,7 +268,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, PSTR szCmdLine, 
 		// 清空缓冲区
 		clear_frameBuffer(screen_fb, width, height, back_color);
 		clear_zbuffer(zbuffer, width, height);
-
 		
 		if (keys_buffer[0x41]) camera_pos.x -= 0.2;
 		if (keys_buffer[0x44]) camera_pos.x += 0.2;
@@ -587,7 +586,7 @@ void set_bitmap(BITMAPINFO& bi, HDC& screen_dc, HBITMAP& screen_hb, HBITMAP& scr
 	bi.bmiHeader.biClrUsed = 0;						// 实际用到的颜色表的颜色索引数
 	bi.bmiHeader.biClrImportant = 0;				// 显示位图要用到的颜色索引数
 
-		// bitmap
+	// bitmap
 	// **2、创建内存设备环境句柄**
 	HDC hdc = GetDC(hwnd);
 	screen_dc = CreateCompatibleDC(hdc);

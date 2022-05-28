@@ -776,8 +776,6 @@ void DrawTriangle_barycentric_Shader(v2f* v_s, Vec3f lightPos, Renderer renderer
 				//cout << "P.x: " << P.x << " P.y: " << P.y << endl;
 				screen_fb_1[index] = color_result;
 			}
-
-
 		}
 	}
 }
