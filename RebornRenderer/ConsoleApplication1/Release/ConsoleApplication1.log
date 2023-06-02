@@ -1,0 +1,112 @@
+﻿  graphic.cpp
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(15,19): warning C4091: “extern ”: 没有声明变量时忽略“Vec2f”的左侧
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(16,19): warning C4091: “extern ”: 没有声明变量时忽略“Vec3f”的左侧
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(17,19): warning C4091: “extern ”: 没有声明变量时忽略“Vec4f”的左侧
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(63,17): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(64,17): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(73,18): warning C4244: “=”: 从“int”转换到“_Ty”，可能丢失数据
+          with
+          [
+              _Ty=float
+          ]
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(74,18): warning C4244: “=”: 从“int”转换到“_Ty”，可能丢失数据
+          with
+          [
+              _Ty=float
+          ]
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(75,18): warning C4244: “=”: 从“int”转换到“_Ty”，可能丢失数据
+          with
+          [
+              _Ty=float
+          ]
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(171,21): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(172,21): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(318,53): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(319,54): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(320,45): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(355,53): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(356,54): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(357,45): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(393,53): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(394,54): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(395,45): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(524,9): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(569,33): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(570,33): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(635,20): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(636,21): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(642,17): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(642,12): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(676,20): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(677,21): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(683,17): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(683,12): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(748,20): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(750,21): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(760,17): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(760,12): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(774,32): warning C4244: “+=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(775,32): warning C4244: “+=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(779,27): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(779,22): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(824,20): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(825,21): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(834,17): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(834,12): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(841,32): warning C4244: “+=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(842,32): warning C4244: “+=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(895,20): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(896,21): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(905,17): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(905,12): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(912,32): warning C4244: “+=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(913,32): warning C4244: “+=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(925,27): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(925,22): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(971,20): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(972,21): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(981,17): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(981,12): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(988,32): warning C4244: “+=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(989,32): warning C4244: “+=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1001,27): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1001,22): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1044,20): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1045,21): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1054,17): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1054,12): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1119,20): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1120,21): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1129,17): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1129,12): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1165,20): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1166,21): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1172,17): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\graphic.cpp(1172,12): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+  main.cpp
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(15,19): warning C4091: “extern ”: 没有声明变量时忽略“Vec2f”的左侧
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(16,19): warning C4091: “extern ”: 没有声明变量时忽略“Vec3f”的左侧
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(17,19): warning C4091: “extern ”: 没有声明变量时忽略“Vec4f”的左侧
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(63,17): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(64,17): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(260,27): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(268,27): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(274,45): warning C4305: “-=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(275,45): warning C4305: “+=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(276,45): warning C4305: “+=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(277,45): warning C4305: “-=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(280,38): warning C4305: “-=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(281,38): warning C4305: “+=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(355,6): warning C4101: “hdc”: 未引用的局部变量
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(356,14): warning C4101: “ps”: 未引用的局部变量
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(357,7): warning C4101: “rect”: 未引用的局部变量
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(433,29): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(537,52): warning C4305: “参数”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(538,51): warning C4305: “参数”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(539,49): warning C4305: “参数”: 从“double”到“float”截断
+  正在生成代码
+  218 of 624 functions (34.9%) were compiled, the rest were copied from previous compilation.
+    51 functions were new in current compilation
+    54 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  ConsoleApplication1.vcxproj -> D:\0_Way\Code\Renderer\RebornRenderer\Release\ConsoleApplication1.exe

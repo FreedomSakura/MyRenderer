@@ -1,0 +1,27 @@
+﻿  main.cpp
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(15,19): warning C4091: “extern ”: 没有声明变量时忽略“Vec2f”的左侧
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(16,19): warning C4091: “extern ”: 没有声明变量时忽略“Vec3f”的左侧
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(17,19): warning C4091: “extern ”: 没有声明变量时忽略“Vec4f”的左侧
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(63,17): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\geometry.h(64,17): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(260,27): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(268,27): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(274,45): warning C4305: “-=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(275,45): warning C4305: “+=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(276,45): warning C4305: “+=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(277,45): warning C4305: “-=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(280,38): warning C4305: “-=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(281,38): warning C4305: “+=”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(299,33): warning C4311: “类型强制转换”: 从“Renderer *”到“DWORD”的指针截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(299,33): warning C4302: “类型强制转换”: 从“Renderer *”到“DWORD”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(349,12): warning C4244: “return”: 从“WPARAM”转换到“int”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(388,19): warning C4244: “=”: 从“WPARAM”转换到“short”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(355,6): warning C4101: “hdc”: 未引用的局部变量
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(356,14): warning C4101: “ps”: 未引用的局部变量
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(357,7): warning C4101: “rect”: 未引用的局部变量
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(433,29): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(529,52): warning C4305: “参数”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(530,51): warning C4305: “参数”: 从“double”到“float”截断
+D:\0_Way\Code\Renderer\RebornRenderer\ConsoleApplication1\main.cpp(531,49): warning C4305: “参数”: 从“double”到“float”截断
+MSVCRT.lib(exe_main.obj) : error LNK2001: 无法解析的外部符号 main
+D:\0_Way\Code\Renderer\RebornRenderer\x64\Release\ConsoleApplication1.exe : fatal error LNK1120: 1 个无法解析的外部命令

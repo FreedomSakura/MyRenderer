@@ -114,10 +114,13 @@ public:
 	//{}
 	// 过程处理着色器：输入面索引iface和0-2的索引n找到顶点，并将其的相关数据存储在a2v结构中
 	virtual a2v processShader(int iface, int n);	// 这个名字是我自创的！
+	void processShader(int iface, int n, std::shared_ptr<a2v> a);
+	void processShader(int iface, int n, a2v* a);
 	// 顶点着色器：输入a2v，处理后返回v2f
 	virtual v2f vertexShader(a2v a);
 	// 高德洛着色
-	virtual v2f vertexShader_Gouruad(a2v a, Vec3f lightPos);
+	//void vertexShader_Gouruad(std::shared_ptr<a2v> a, std::shared_ptr<v2f> v, Vec3f lightPos);
+	void vertexShader_Gouruad(a2v* a, v2f* v, Vec3f lightPos);
 	// 将proecssShader和vertexShader结合在一起
 	virtual v2f vertexShader_and_proecc(int iface, int n);
 	// 片元着色器：输入该片元的重心坐标与源颜色，进行处理，bool返回值表示是否丢弃该片元

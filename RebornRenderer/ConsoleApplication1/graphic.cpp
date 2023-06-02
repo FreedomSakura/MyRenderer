@@ -229,6 +229,24 @@ a2v Renderer::processShader(int iface, int n) {
 	return a;
 }
 
+void Renderer::processShader(int iface, int n, std::shared_ptr<a2v> a) {
+	// 获取该顶点位置
+	a->vertex_native = mesh->get_vert_(iface, n).embed_4();
+	a->normal_native = mesh->get_norm_(iface, n);
+	a->texcoord_native = mesh->get_uv_(iface, n);
+
+	return;
+}
+
+void Renderer::processShader(int iface, int n, a2v* a) {
+	// 获取该顶点位置
+	a->vertex_native = mesh->get_vert_(iface, n).embed_4();
+	a->normal_native = mesh->get_norm_(iface, n);
+	a->texcoord_native = mesh->get_uv_(iface, n);
+
+	return;
+}
+
 //// 执行所有矩阵变换
 
 //v2f Renderer::vertexShader(a2v a) {
@@ -319,8 +337,9 @@ v2f Renderer::vertexShader(a2v a) {
 }
 
 // 高德洛着色
-v2f Renderer::vertexShader_Gouruad(a2v a, Vec3f lightPos) {
-	v2f v;
+//void Renderer::vertexShader_Gouruad(std::shared_ptr<a2v> a, std::shared_ptr<v2f> v, Vec3f lightPos) {
+void Renderer::vertexShader_Gouruad(a2v* a, v2f* v, Vec3f lightPos) {
+	//v2f v;
 
 	//变换模块
 	Vec4f clip_coord;
@@ -328,7 +347,7 @@ v2f Renderer::vertexShader_Gouruad(a2v a, Vec3f lightPos) {
 
 	Vec4f ndc_coord;	// ndc应该是以三维向量表示的
 	// MVP
-	clip_coord = transformer.update_MVP_without_model() * a.vertex_native;
+	clip_coord = transformer.update_MVP_without_model() * a->vertex_native;
 
 	// 透视除法
 	ndc_coord = clip_coord / clip_coord.w;
@@ -337,20 +356,20 @@ v2f Renderer::vertexShader_Gouruad(a2v a, Vec3f lightPos) {
 	screen_coord.y = (ndc_coord.y + 1.f) * 0.5 * height + transformer.v_y;
 	screen_coord.z = (ndc_coord.z + 1.f) * 0.5 * depth;
 
-	Vec3f normal_coord = a.normal_native;
+	Vec3f normal_coord = a->normal_native;
 	normal_coord.normalize();
 
 	// 光照模型
 	float diffuse = max(0, normal_coord * lightPos);
-	v.intensity = diffuse;
+	v->intensity = diffuse;
 
-	v.vertex = screen_coord;
-	v.normal = normal_coord;
-	v.texcoord = a.texcoord_native;
+	v->vertex = screen_coord;
+	v->normal = normal_coord;
+	v->texcoord = a->texcoord_native;
 	//v.ndc_coord = ndc_coord;
 	//cout << "x: " << v.vertex.x << " y: " << v.vertex.y << " z: " << v.vertex.z
 	//	<< " w: " << v.vertex.w << endl;
-	return v;
+	return;
 }
 
 // 将proecssShader和vertexShader结合在一起

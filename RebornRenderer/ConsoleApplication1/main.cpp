@@ -451,19 +451,24 @@ void Draw_2(HWND hwnd, Renderer renderer) {
 	ReleaseDC(hwnd, hDC);
 }
 void Draw_2_Gouruad(HWND hwnd, Renderer renderer, Vec3f lightPos) {
+	//std::shared_ptr<a2v> a_s = std::make_shared<a2v>(new a2v[3], std::default_delete<a2v[]>());
+	//std::shared_ptr<v2f> v_s = std::make_shared<v2f>(new v2f[3], std::default_delete<v2f[]>());
+	std::shared_ptr<a2v> a_s(new a2v[3], std::default_delete<a2v[]>());
+	std::shared_ptr<v2f> v_s(new v2f[3], std::default_delete<v2f[]>());
 	for (int i = 0; i < renderer.get_nums_faces(); i++) {
-		a2v a_s[3];
-		v2f v_s[3];
+		
 		for (int j = 0; j < 3; j++) {
-			a_s[j] = renderer.processShader(i, j);
+			//a_s[j] = renderer.processShader(i, j);
+			renderer.processShader(i, j, &a_s.get()[j]);
 
 			// 80->140 = 60帧 
-			v_s[j] = renderer.vertexShader_Gouruad(a_s[j], lightPos);
+			//v_s[j] = renderer.vertexShader_Gouruad(a_s[j], lightPos);
+			renderer.vertexShader_Gouruad(&a_s.get()[j], &v_s.get()[j], lightPos);
 		}
 
 		// 测试新的Shader结构
 		// 80->150 = 70帧
-		DrawTriangle_barycentric_Shader_Gouruad(v_s, renderer);
+		DrawTriangle_barycentric_Shader_Gouruad(v_s.get(), renderer);
 	}
 
 	HDC hDC = GetDC(hwnd);
